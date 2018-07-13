@@ -7,6 +7,7 @@ namespace Exercise.Models
 {
     public class TransactionList
     {
+        
         public string accountNumber { get; set; }
         public string tranactionType { get; set; }
         public string amount { get; set; }
