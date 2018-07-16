@@ -85,8 +85,8 @@ namespace Exercise.Controllers
             if(HttpContext.Request.Query["accno"].ToString() !="")
             {
                 string AccountNumber = HttpContext.Request.Query["accno"].ToString();
-                ViewBag.lblAccountNumber = AccountNumber;
-                if (transaction.amount !=null)
+                 ViewBag.lblAccountNumber = AccountNumber;
+                if(transaction.amount !=null)
                 {
                     if(drpdowntype=="Deposit")
                     {
@@ -97,19 +97,19 @@ namespace Exercise.Controllers
                     {
                         Typevalue = "Debit";
                     }
-                    else if(drpdowntype=="InterestPaind")
+                    else if(drpdowntype=="InterestPaid")
                     {
                         Typevalue = "Debit";
                     }
                     else
                     {
-                        if(transaction.transactionType=="Debit")
+                        if(transaction.transactionType== "Credit")
                         {
-                            Typevalue = "Debit";
+                            Typevalue = "Credit";
                         }
                         else
                         {
-                            Typevalue = "Credit";
+                            Typevalue = "Debit";
                         }
                     }
 
@@ -120,7 +120,7 @@ namespace Exercise.Controllers
                         transactionData.accountNumber = AccountNumber;
                         transactionData.description = transaction.description;
                         transactionData.modified_date = DateTime.Now;
-                        transactionData.transaction_date = transaction.transaction_date;
+                        transactionData.transaction_date = DateTime.Now;
                         transactionData.amount = transaction.amount;
                         transactionData.transactionType = Typevalue;
                         totalBalance = getTotalBalance(AccountNumber).ToString();
