@@ -17,7 +17,7 @@ namespace Exercise.Models
         //}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"data source=LAPTOP-9R7341J9;initial catalog=ANZ;persist security info=True;Trusted_Connection=True;multipleactiveresultsets=True");
+            optionsBuilder.UseSqlServer(@"data source=LAPTOP-9R7341J9;initial catalog=Comm;persist security info=True;Trusted_Connection=True;multipleactiveresultsets=True");
         }
 
         public virtual DbSet<Transaction> transactions { get; set; }

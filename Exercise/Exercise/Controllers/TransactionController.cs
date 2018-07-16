@@ -12,7 +12,7 @@ namespace Exercise.Controllers
         private TransactionDbContext context = new TransactionDbContext();
         public IActionResult Viewtransaction(string accountNumber)
         {
-
+            ViewBag.Showlist = false;
             if(HttpContext.Request.Query["accno"].ToString() !="")
             {
                 string AccountNumber = HttpContext.Request.Query["accno"].ToString();
@@ -21,6 +21,9 @@ namespace Exercise.Controllers
 
             if(accountNumber !=null)
             {
+                ViewBag.ShowList = true;
+                ViewBag.AccountNumber = accountNumber;
+                ViewBag.TotalBalance = getTotalBalance(accountNumber).ToString();
                 var result = context.transactions.Where(i => i.accountNumber == accountNumber);
                     if(result !=null)
                 {
@@ -42,6 +45,35 @@ namespace Exercise.Controllers
                 }
             }
             return View();
+        }
+        public decimal getTotalBalance(string accountNumber)
+        {
+            //decimal totalBalance = 0;
+            //var result = (from t in ds.tbltransactions orderby t.balance select t).Take(1);
+            decimal balance = 0;
+            try
+            {
+                var result = (from t in context.transactions
+                              where t.accountNumber == accountNumber
+                              orderby t.id descending
+                              select t).First();
+                balance = decimal.Parse(result.balance.ToString());
+            }
+            catch (Exception e)
+            {
+                balance = 0;
+            }
+
+            ////var result = ds.tbltransactions.Where(i => i.accountno == accountno).ToList();
+            //if (result != null)
+            //{
+            //    foreach (var dr in result)
+            //    {
+            //        totalBalance += Convert.ToDecimal(dr.balance);
+            //    }
+            //}
+            //totalBalance = (from od in ds.tbltransactions where od.accountno == accountno select Convert.ToDecimal(od.balance)).Sum();
+            return balance;
         }
     }
 }
