@@ -31,8 +31,8 @@ namespace Exercise.Models
                 entity.Property(e => e.accountNumber)
                     .HasColumnType("accountNumber");
 
-                entity.Property(e => e.tranactionType)
-                    .HasColumnType("tranactionType");
+                entity.Property(e => e.transactionType)
+                    .HasColumnType("tranasctionType");
 
                 entity.Property(e => e.amount).HasColumnType("amount");
 

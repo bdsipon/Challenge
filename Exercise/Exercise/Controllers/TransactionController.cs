@@ -33,7 +33,7 @@ namespace Exercise.Controllers
                         Tlist.Add(new TransactionList
                         {
                             accountNumber = data.accountNumber,
-                            tranactionType = data.tranactionType,
+                            transactionType = data.transactionType,
                             amount = data.amount.ToString(),
                             balance = data.balance.ToString(),
                             description = data.description,
@@ -73,6 +73,91 @@ namespace Exercise.Controllers
             //    }
             //}
             //totalBalance = (from od in ds.tbltransactions where od.accountno == accountno select Convert.ToDecimal(od.balance)).Sum();
+            return balance;
+        }
+
+        public IActionResult AddTransaction(Transaction transaction, string drpdowntype)
+        {
+            ViewBag.Showlist = false;
+            string Typevalue = "";
+            string totalBalance = "";
+
+            if(HttpContext.Request.Query["accno"].ToString() !="")
+            {
+                string AccountNumber = HttpContext.Request.Query["accno"].ToString();
+                ViewBag.lblAccountNumber = AccountNumber;
+                if (transaction.amount !=null)
+                {
+                    if(drpdowntype=="Deposit")
+                    {
+                        Typevalue = "Credit";
+                    }
+
+                    else if(drpdowntype=="Withdrawal")
+                    {
+                        Typevalue = "Debit";
+                    }
+                    else if(drpdowntype=="InterestPaind")
+                    {
+                        Typevalue = "Debit";
+                    }
+                    else
+                    {
+                        if(transaction.transactionType=="Debit")
+                        {
+                            Typevalue = "Debit";
+                        }
+                        else
+                        {
+                            Typevalue = "Credit";
+                        }
+                    }
+
+
+                    if(ModelState.IsValid)
+                    {
+                        Transaction transactionData = new Transaction();
+                        transactionData.accountNumber = AccountNumber;
+                        transactionData.description = transaction.description;
+                        transactionData.modified_date = DateTime.Now;
+                        transactionData.transaction_date = transaction.transaction_date;
+                        transactionData.amount = transaction.amount;
+                        transactionData.transactionType = Typevalue;
+                        totalBalance = getTotalBalance(AccountNumber).ToString();
+
+                        if(Typevalue=="Debit")
+                        {
+                            transactionData.balance = (Convert.ToDecimal(totalBalance) - (transaction.amount));
+                        }
+                        else
+                        {
+                            transactionData.balance = (Convert.ToDecimal(totalBalance) + (transaction.amount));
+
+                        }
+                        context.transactions.Add(transactionData);
+                        context.SaveChanges();
+                        return RedirectToAction("Viewtransaction", "transaction", new { accno = AccountNumber });
+                    }
+                }
+            }
+            return View();
+        }
+
+        public decimal getBalance(string accountNumber)
+        {
+            decimal balance = 0;
+            try
+            {
+                var result = (from t in context.transactions
+                              where t.accountNumber == accountNumber
+                              orderby t.id descending
+                              select t).First();
+                balance = decimal.Parse(result.balance.ToString());
+            }
+            catch (Exception e)
+            {
+                balance = 0;
+            }
             return balance;
         }
     }

@@ -9,7 +9,7 @@ namespace Exercise.Models
     {
         
         public string accountNumber { get; set; }
-        public string tranactionType { get; set; }
+        public string transactionType { get; set; }
         public string amount { get; set; }
         public string balance { get; set; }
         public string description { get; set; }

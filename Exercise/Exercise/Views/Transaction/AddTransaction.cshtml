@@ -1,0 +1,138 @@
+﻿@model Exercise.Models.Transaction
+@{
+    ViewBag.Title = "AddTransaction";
+}
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+
+<link href="~/Content/style.css" rel="stylesheet" />
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <script type="text/javascript">
+
+        $(document).ready(
+            $("#textDate").datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+            }));
+
+        $(document).ready(function () {
+            $("#textDate").datepicker({
+                dateFormat: 'dd/mm/yyyy',
+                         changeMonth: true,
+                changeYear: true,
+            });
+
+        });
+
+        function ShowData() {
+
+            var data = $("#drpdownType").val();
+            if (data == "Adjustment") {
+                $("#dvPassport").show();
+            } else {
+                $("#dvPassport").hide();
+            }
+        }
+    </script>
+    <style>
+        .form-group {
+            width: 200%;
+        }
+    </style>
+    <div class="form-horizontal">
+        <h4 class="hr4_">Add New Transaction</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        <table class="tbl2">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.accountNumber, "Account Number", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @ViewBag.lblAccountNumber
+                            @Html.ValidationMessageFor(model => model.accountNumber)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.transaction_date, "Transaction Date", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.transaction_date, null, new { @class = "form-control", @id = "textDate" })
+                                @*@Html.ValidationMessageFor(model => model.transaction_date)*@
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.description, "Description", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.description, null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.description)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+
+                        @*@Html.LabelFor("Select Transaction type", new { @class = "control-label col-md-2" })*@
+                        <label class="control-label col-md-2">Select Transaction type</label>
+                        <div class="col-md-10">
+                            @Html.DropDownList("drpdownType", new List<SelectListItem> {
+                            new SelectListItem{ Text="Deposit", Value = "Deposit" },new SelectListItem{ Text="Withdrawal", Value = "Withdrawal" },
+                            new SelectListItem{ Text="Interest Paid", Value = "InterestPaid" },new SelectListItem{ Text="Adjustment", Value = "Adjustment" }},
+                            new { @onchange = "ShowData();" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr id="dvPassport" style="display:none">
+                <td>Type</td>
+                <td>
+                    @Html.RadioButtonFor(model => model.transactionType, "TransactionType", "Debit") Debit
+                    @Html.RadioButtonFor(model => model.transactionType, "TransactionType", "Credit") Credit
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.amount, "Amount", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.amount, null, new { @class = "form-control", @id = "textamount" })
+                            @Html.ValidationMessageFor(model => model.amount)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Add New Transaction" class="btn" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+
